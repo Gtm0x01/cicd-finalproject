@@ -1,16 +1,293 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Deployment Demo</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-    h1 { color: #333; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PipelineX — CI/CD Lab Demo</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <h1>Hello, GitHub Actions.!</h1>
-  <p>This site is deployed to Vercel automatically by Group 1 for final cicd project for final presentation.</p>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="nav-logo">▶</span>
+      <span class="nav-title">PipelineX</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#stages">Stages</a></li>
+      <li><a href="#metrics">Metrics</a></li>
+      <li><a href="#logs">Logs</a></li>
+    </ul>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span class="status-text">Build #47 Running</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="hero">
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-label">LAB PROJECT DEMO</span>
+      </div>
+      <h1 class="hero-headline">
+        CI/CD<br /><span class="highlight">Pipeline</span><br />Automation
+      </h1>
+      <p class="hero-sub">
+        End-to-end continuous integration and delivery workflow — from code commit to production deploy, fully automated.
+      </p>
+      <div class="hero-actions">
+        <a href="#pipeline" class="btn btn-primary">View Pipeline ↓</a>
+        <a href="#logs" class="btn btn-ghost">Live Logs</a>
+      </div>
+    </div>
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <span class="t-dot red"></span>
+        <span class="t-dot yellow"></span>
+        <span class="t-dot green"></span>
+        <span class="t-title">bash — pipeline.sh</span>
+      </div>
+      <div class="terminal-body">
+        <p><span class="t-prompt">$</span> git push origin main</p>
+        <p class="t-muted">Enumerating objects: 12, done.</p>
+        <p class="t-muted">Counting objects: 100% (12/12), done.</p>
+        <p class="t-success">✔ Webhook triggered → PipelineX</p>
+        <p><span class="t-prompt">$</span> pipeline run --env=production</p>
+        <p class="t-info">► Stage 1: Source  <span class="t-success">PASSED</span></p>
+        <p class="t-info">► Stage 2: Build   <span class="t-success">PASSED</span></p>
+        <p class="t-info">► Stage 3: Test    <span class="t-running">RUNNING...</span></p>
+        <p class="t-muted cursor-blink">_</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- PIPELINE VISUAL -->
+  <section class="pipeline-section" id="pipeline">
+    <div class="section-label">// PIPELINE OVERVIEW</div>
+    <h2 class="section-title">Build #47 — <span class="highlight">In Progress</span></h2>
+
+    <div class="pipeline-track">
+      <!-- Stage 1 -->
+      <div class="pipeline-stage done">
+        <div class="stage-icon">⬡</div>
+        <div class="stage-info">
+          <div class="stage-name">Source</div>
+          <div class="stage-detail">git checkout → main</div>
+          <div class="stage-badge done">✔ Passed</div>
+        </div>
+        <div class="stage-time">0:02s</div>
+      </div>
+      <div class="connector done"></div>
+
+      <!-- Stage 2 -->
+      <div class="pipeline-stage done">
+        <div class="stage-icon">⬡</div>
+        <div class="stage-info">
+          <div class="stage-name">Build</div>
+          <div class="stage-detail">docker build -t app:47</div>
+          <div class="stage-badge done">✔ Passed</div>
+        </div>
+        <div class="stage-time">1:14s</div>
+      </div>
+      <div class="connector running"></div>
+
+      <!-- Stage 3 -->
+      <div class="pipeline-stage running">
+        <div class="stage-icon spin">⬡</div>
+        <div class="stage-info">
+          <div class="stage-name">Test</div>
+          <div class="stage-detail">jest --coverage</div>
+          <div class="stage-badge running">● Running</div>
+        </div>
+        <div class="stage-time">0:38s</div>
+      </div>
+      <div class="connector pending"></div>
+
+      <!-- Stage 4 -->
+      <div class="pipeline-stage pending">
+        <div class="stage-icon">⬡</div>
+        <div class="stage-info">
+          <div class="stage-name">Security</div>
+          <div class="stage-detail">trivy scan + SAST</div>
+          <div class="stage-badge pending">⏸ Pending</div>
+        </div>
+        <div class="stage-time">—</div>
+      </div>
+      <div class="connector pending"></div>
+
+      <!-- Stage 5 -->
+      <div class="pipeline-stage pending">
+        <div class="stage-icon">⬡</div>
+        <div class="stage-info">
+          <div class="stage-name">Deploy</div>
+          <div class="stage-detail">kubectl apply -f k8s/</div>
+          <div class="stage-badge pending">⏸ Pending</div>
+        </div>
+        <div class="stage-time">—</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGES DETAIL -->
+  <section class="stages-section" id="stages">
+    <div class="section-label">// STAGE DETAILS</div>
+    <h2 class="section-title">What Each Stage Does</h2>
+
+    <div class="stages-grid">
+      <div class="stage-card">
+        <div class="card-num">01</div>
+        <div class="card-icon">📦</div>
+        <h3>Source</h3>
+        <p>Triggered on every push to <code>main</code> or PR merge. Clones the repository, validates branch rules, and sets build context.</p>
+        <ul>
+          <li>GitHub Webhook</li>
+          <li>Branch protection checks</li>
+          <li>Commit metadata capture</li>
+        </ul>
+      </div>
+
+      <div class="stage-card">
+        <div class="card-num">02</div>
+        <div class="card-icon">🐳</div>
+        <h3>Build</h3>
+        <p>Compiles application code and assembles a Docker image with multi-stage builds to minimize final image size.</p>
+        <ul>
+          <li>Multi-stage Dockerfile</li>
+          <li>Layer caching (BuildKit)</li>
+          <li>Image tagging by SHA</li>
+        </ul>
+      </div>
+
+      <div class="stage-card active">
+        <div class="card-num">03</div>
+        <div class="card-icon">🧪</div>
+        <h3>Test</h3>
+        <p>Runs unit, integration, and coverage checks. Pipeline fails fast if coverage drops below threshold or tests break.</p>
+        <ul>
+          <li>Jest unit tests</li>
+          <li>Coverage ≥ 80% gate</li>
+          <li>Artifact report upload</li>
+        </ul>
+      </div>
+
+      <div class="stage-card">
+        <div class="card-num">04</div>
+        <div class="card-icon">🔒</div>
+        <h3>Security</h3>
+        <p>Scans dependencies for CVEs and runs static analysis. Blocks deploy on critical vulnerabilities.</p>
+        <ul>
+          <li>Trivy container scan</li>
+          <li>OWASP dependency check</li>
+          <li>Semgrep SAST rules</li>
+        </ul>
+      </div>
+
+      <div class="stage-card">
+        <div class="card-num">05</div>
+        <div class="card-icon">🚀</div>
+        <h3>Deploy</h3>
+        <p>Rolls out to Kubernetes with canary strategy. Monitors rollout health and auto-rollbacks on error rate spike.</p>
+        <ul>
+          <li>Helm chart deploy</li>
+          <li>Canary 10% → 100%</li>
+          <li>Auto-rollback on errors</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <section class="metrics-section" id="metrics">
+    <div class="section-label">// METRICS</div>
+    <h2 class="section-title">Pipeline Health</h2>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-value">98.2<span>%</span></div>
+        <div class="metric-label">Build Success Rate</div>
+        <div class="metric-bar"><div class="metric-fill" style="width:98.2%"></div></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3<span>m 42s</span></div>
+        <div class="metric-label">Avg Pipeline Duration</div>
+        <div class="metric-bar"><div class="metric-fill" style="width:60%"></div></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">47</div>
+        <div class="metric-label">Total Builds This Week</div>
+        <div class="metric-bar"><div class="metric-fill" style="width:78%"></div></div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">84<span>%</span></div>
+        <div class="metric-label">Test Coverage</div>
+        <div class="metric-bar"><div class="metric-fill" style="width:84%"></div></div>
+      </div>
+    </div>
+
+    <div class="build-history">
+      <div class="history-header">Recent Builds</div>
+      <div class="history-list">
+        <div class="history-item success">#47 <span>main — feat: add auth middleware</span> <span class="h-time">Running</span></div>
+        <div class="history-item success">#46 <span>main — fix: token refresh bug</span> <span class="h-time">3m 31s ✔</span></div>
+        <div class="history-item failed">#45 <span>main — refactor: db connection pool</span> <span class="h-time">1m 12s ✘</span></div>
+        <div class="history-item success">#44 <span>main — chore: update dependencies</span> <span class="h-time">3m 58s ✔</span></div>
+        <div class="history-item success">#43 <span>main — feat: rate limiting</span> <span class="h-time">4m 02s ✔</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGS -->
+  <section class="logs-section" id="logs">
+    <div class="section-label">// LIVE LOGS</div>
+    <h2 class="section-title">Stage Output — <span class="highlight">Test</span></h2>
+
+    <div class="log-terminal">
+      <div class="terminal-bar">
+        <span class="t-dot red"></span>
+        <span class="t-dot yellow"></span>
+        <span class="t-dot green"></span>
+        <span class="t-title">stage-3-test.log — Build #47</span>
+      </div>
+      <div class="log-body">
+        <p><span class="log-time">09:14:02</span> <span class="log-info">INFO</span> Starting test runner...</p>
+        <p><span class="log-time">09:14:03</span> <span class="log-info">INFO</span> Collecting test suites: 24 found</p>
+        <p><span class="log-time">09:14:05</span> <span class="log-ok">PASS</span> tests/unit/auth.test.js (12 tests)</p>
+        <p><span class="log-time">09:14:07</span> <span class="log-ok">PASS</span> tests/unit/user.test.js (9 tests)</p>
+        <p><span class="log-time">09:14:09</span> <span class="log-ok">PASS</span> tests/unit/middleware.test.js (7 tests)</p>
+        <p><span class="log-time">09:14:12</span> <span class="log-ok">PASS</span> tests/integration/api.test.js (15 tests)</p>
+        <p><span class="log-time">09:14:15</span> <span class="log-warn">WARN</span> tests/integration/db.test.js — slow query detected (>200ms)</p>
+        <p><span class="log-time">09:14:18</span> <span class="log-ok">PASS</span> tests/integration/db.test.js (11 tests)</p>
+        <p><span class="log-time">09:14:20</span> <span class="log-info">INFO</span> Generating coverage report...</p>
+        <p><span class="log-time">09:14:21</span> <span class="log-info">INFO</span> Coverage: <span class="log-ok">84.3%</span> (threshold: 80%)</p>
+        <p><span class="log-time">09:14:21</span> <span class="log-run">RUN </span> Uploading coverage artifact to S3...</p>
+        <p class="cursor-blink"><span class="log-time">09:14:22</span> <span class="log-run">RUN </span> _</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section class="stack-section">
+    <div class="section-label">// TECH STACK</div>
+    <h2 class="section-title">Tools Used</h2>
+    <div class="stack-grid">
+      <div class="stack-item">GitHub Actions</div>
+      <div class="stack-item">Vercel</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">▶ PipelineX</div>
+      <div class="footer-text">CI/CD Final Lab Project — Built for DevOps Engineering</div>
+      <div class="footer-copy">© 2026</div>
+    </div>
+  </footer>
+
 </body>
 </html>
